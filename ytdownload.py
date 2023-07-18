@@ -1,10 +1,20 @@
 import os
 import streamlit as st
 from pytube import YouTube
+import platform
 
 '''
 # Youtube Downloader
 '''
+
+# Set the default download path based on the operating system
+system = platform.system()
+
+if system == "Windows":
+    default_download_path = os.path.join(os.path.expandvars("%userprofile%"), "Downloads")
+else:  # Linux and other Unix-like systems
+    default_download_path = os.path.join(os.path.expanduser("~"), "Downloads")
+
 
 if link := st.text_input('Enter the video link here'):
     yt = YouTube(link)
@@ -22,12 +32,12 @@ if link := st.text_input('Enter the video link here'):
         ):
             video_download = video_raw.get_by_itag(selected_video)
             try:
-                # output_path = os.path.join(os.path.expanduser("~"), "Downloads")
-                video_download.download()
+
+                video_download.download(output_path=default_download_path)
                 st.write('✅ Video downloaded: Successful!')
             except Exception:
                 st.write("Wrong input! Carefully choose the itag value 😃")
-                # st.write('Download Path:', os.path.join(output_path, video_download.default_filename))
+                st.write('Download Path:', os.path.join(default_download_path, video_download.default_filename))
             
     else:
         audio_raw = yt.streams.filter(only_audio=True)
@@ -39,9 +49,9 @@ if link := st.text_input('Enter the video link here'):
         ):
             audio_download = audio_raw.get_by_itag(selected)
             try:
-                # output_path = os.path.join(os.path.expanduser("~"), "Downloads")
-                audio_download.download()
+                audio_download.download(output_path=default_download_path)
                 st.write('✅ Audio downloaded: Successful!')
                 st.write('Download Path:', audio_download.get_file_path())
             except Exception:
                 st.write("Wrong input! Carefully choose the itag value 😃")
+                st.write('Download Path:', os.path.join(default_download_path, audio_download.default_filename))
