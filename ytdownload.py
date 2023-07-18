@@ -22,12 +22,12 @@ if link := st.text_input('Enter the video link here'):
         ):
             video_download = video_raw.get_by_itag(selected_video)
             try:
-                output_path = os.path.join(os.path.expanduser("~"), "Downloads")
-                video_download.download(output_path=output_path)
+                # output_path = os.path.join(os.path.expanduser("~"), "Downloads")
+                video_download.download()
                 st.write('✅ Video downloaded: Successful!')
             except Exception:
                 st.write("Wrong input! Carefully choose the itag value 😃")
-                st.write('Download Path:', os.path.join(output_path, video_download.default_filename))
+                # st.write('Download Path:', os.path.join(output_path, video_download.default_filename))
             
     else:
         audio_raw = yt.streams.filter(only_audio=True)
@@ -39,9 +39,9 @@ if link := st.text_input('Enter the video link here'):
         ):
             audio_download = audio_raw.get_by_itag(selected)
             try:
-                output_path = os.path.join(os.path.expanduser("~"), "Downloads")
-                audio_download.download(output_path=output_path)
+                # output_path = os.path.join(os.path.expanduser("~"), "Downloads")
+                audio_download.download()
                 st.write('✅ Audio downloaded: Successful!')
-                st.write('Download Path:', os.path.join(output_path, audio_download.default_filename))
+                st.write('Download Path:', audio_download.get_file_path())
             except Exception:
                 st.write("Wrong input! Carefully choose the itag value 😃")
